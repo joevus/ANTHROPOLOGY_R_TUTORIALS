@@ -121,6 +121,8 @@ population size and the number of sports teams or between the amount of
 sunshine and the number of bike commuters; or maybe we are interested in
 looking at regional variation in sunshine in our focal cities.</p>
 <p>Load in data and examine the structure.</p>
+<pre class="r"><code>CityInfo  &lt;- read.csv(&quot;D:/BSOS_Anthropology_R_Tutorial/ANTHROPOLOGY_R_TUTORIALS/data/Cityinfo.csv&quot;)
+str(CityInfo)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    19 obs. of  8 variables:
 ##  $ City                : chr  &quot;New York&quot; &quot;Los Angeles&quot; &quot;San Francisco&quot; &quot;Chicago&quot; ...
 ##  $ State               : chr  &quot;NY&quot; &quot;CA&quot; &quot;CA&quot; &quot;IL&quot; ...
@@ -132,10 +134,12 @@ looking at regional variation in sunshine in our focal cities.</p>
 ##  $ Sportsteam_num      : int  9 8 6 5 4 1 4 4 4 4 ...</code></pre>
 <p>Let’s calculate the mean amount of <code>sunshine</code> for
 <code>midwestern</code> cities.</p>
+<pre class="r"><code>mean(CityInfo[CityInfo$Region==&quot;MW&quot;,&quot;Sunshine_per&quot;])</code></pre>
 <pre><code>## [1] 54.75</code></pre>
 <p>Now let’s subset the dataframe according to regions and calculate the
 mean sunshine for all regions. Try using the <code>aggregate()</code>
 function.</p>
+<pre class="r"><code>aggregate(Sunshine_per~Region,CityInfo,mean)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["Region"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Sunshine_per"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"MW","2":"54.75000"},{"1":"NE","2":"57.33333"},{"1":"S","2":"60.50000"},{"1":"W","2":"64.66667"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -200,8 +204,14 @@ Sportstats</code></pre>
 <h3></h3>
 <p>In addition to central tendency metrics, it is also often useful to
 examine the spread or dispersion of observations within a dataset.</p>
+<pre class="r"><code># Make a histogram of the population data
+hist(CityInfo$Populationmetro_2016)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-4-1.png" width="624" /></p>
+<pre class="r"><code># What is the variance in population?
+var(CityInfo$Populationmetro_2016)</code></pre>
 <pre><code>## [1] 2.290866e+13</code></pre>
+<pre class="r"><code># you can also look at a range of summary statistics for populations
+describe(CityInfo$Populationmetro_2016)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["vars"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["median"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["trimmed"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mad"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["min"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["max"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["range"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["skew"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["kurtosis"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["se"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"19","3":"5809737","4":"4786299","5":"4950000","6":"5222059","7":"1971858","8":"925000","9":"20685000","10":"19760000","11":"1.821333","12":"2.822275","13":"1098052","_rn_":"X1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -211,6 +221,7 @@ examine the spread or dispersion of observations within a dataset.</p>
 <code>table()</code> function. To answer the question
 <code>How many cities are in each region?</code> we can use the
 following code.</p>
+<pre class="r"><code>table(CityInfo$Region)</code></pre>
 <pre><code>## 
 ## MW NE  S  W 
 ##  4  3  6  6</code></pre>
@@ -244,6 +255,8 @@ href="https://knb.ecoinformatics.org/view/urn%3Auuid%3Ab910f74b-171b-4d2b-b065-f
 counts of sea otters at specific sites in Southeast Alaska</a>. These
 data are sea otter counts from 2017 and 2018 in Alaska.</p>
 <p>First read in and examine the data.</p>
+<pre class="r"><code>otter &lt;- read.csv(&quot;D:/BSOS_Anthropology_R_Tutorial/ANTHROPOLOGY_R_TUTORIALS/data/sea_otter_counts_2017&amp;2018_CLEANDATA.csv&quot;)
+str(otter)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    1337 obs. of  8 variables:
 ##  $ region     : chr  &quot;west prince of wales island, alaska&quot; &quot;west prince of wales island, alaska&quot; &quot;west prince of wales island, alaska&quot; &quot;west prince of wales island, alaska&quot; ...
 ##  $ site_name  : chr  &quot;Big Clam Bay&quot; &quot;Big Clam Bay&quot; &quot;Big Tree Bay&quot; &quot;Big Tree Bay&quot; ...
@@ -259,10 +272,13 @@ data are sea otter counts from 2017 and 2018 in Alaska.</p>
 <code>replicate</code>, and <code>n_otter</code>.</p>
 <p>Let’s aggregate the mean number of otters observed on a given day by
 site.</p>
+<pre class="r"><code>#data are aggregated based on site name and the function &quot;mean&quot; is applied to them
+aggregate(otter, by=list(otter$site_name), FUN=mean, na.rm=TRUE)</code></pre>
 <p>The above applied the <code>mean()</code> function to all columns.
 This can be useful when you have many numeric variables you wish to
 quickly summarize. Other times however, it can be helpful to isolate
 specific variables for comparison.</p>
+<pre class="r"><code>aggregate(n_otter~site_name, FUN=mean, data = otter)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["site_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n_otter"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Big Clam Bay","2":"0.5000000"},{"1":"Big Tree Bay","2":"1.9876543"},{"1":"Blanquizal Bay","2":"2.6428571"},{"1":"Chusini Cove 1","2":"1.7704918"},{"1":"Chusini Cove 2","2":"2.9166667"},{"1":"Dunbar Inlet","2":"1.6818182"},{"1":"Farallon Bay","2":"0.0000000"},{"1":"Garcia Cove","2":"2.2131148"},{"1":"Goat Mouth Inlet","2":"0.0000000"},{"1":"Guktu Cove 1","2":"3.0454545"},{"1":"Guktu Cove 2","2":"3.7083333"},{"1":"Hauti Island","2":"1.9583333"},{"1":"Hetta Cove","2":"0.0000000"},{"1":"Kaguk Cove","2":"2.5044248"},{"1":"Kinani Point","2":"4.2325581"},{"1":"Mushroom Island","2":"0.0000000"},{"1":"N Fish Egg Island","2":"1.8800000"},{"1":"Natzuhini Bay 1","2":"0.0000000"},{"1":"Natzuhini Bay 2","2":"0.0000000"},{"1":"Natzuhini Bay 3","2":"0.0000000"},{"1":"Naukati Bay","2":"1.1276596"},{"1":"North Pass 1","2":"0.0000000"},{"1":"North Pass 2","2":"0.0000000"},{"1":"Nossuk Bay 1","2":"1.5000000"},{"1":"Nossuk Bay 2","2":"1.6923077"},{"1":"Nossuk Bay 3","2":"1.6206897"},{"1":"Port Caldera","2":"0.0000000"},{"1":"Port Refugio","2":"0.4000000"},{"1":"S Fish Egg Island","2":"1.8750000"},{"1":"S Wadleigh Island","2":"1.7000000"},{"1":"S16","2":"5.9696970"},{"1":"S23","2":"3.4210526"},{"1":"S25","2":"1.0000000"},{"1":"S3","2":"1.1818182"},{"1":"S32","2":"2.4411765"},{"1":"S33","2":"2.2291667"},{"1":"Salt Lake Bay 1","2":"2.7368421"},{"1":"Salt Lake Bay 2","2":"2.0243902"},{"1":"SHB","2":"1.0000000"},{"1":"Shinaku Inlet","2":"2.7640449"},{"1":"Soda Bay","2":"2.2325581"},{"1":"Sukkwan Narrows","2":"0.5000000"},{"1":"Trocadero Bay","2":"0.6666667"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -352,10 +368,12 @@ it is false, another action is performed. This can be used to make new
 variables, subset data, color points on a graph and much more.</p>
 <p>Using the <code>CityInfo</code> data and <code>ifelse()</code> we can
 mark each row based on whether or not the region is MW.</p>
+<pre class="r"><code>ifelse(CityInfo$Region==&quot;MW&quot;,&quot;yes&quot;,&quot;nope&quot;)</code></pre>
 <pre><code>##  [1] &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;yes&quot;  &quot;yes&quot;  &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;yes&quot; 
 ## [11] &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;yes&quot;</code></pre>
 <p>We can also see which cities are both in the midwest and have over 2%
 of commuters as bike commuters.</p>
+<pre class="r"><code>ifelse(CityInfo$Region==&quot;MW&quot; &amp; CityInfo$Bikecom_per&gt;2,&quot;yes&quot;,&quot;nope&quot;)</code></pre>
 <pre><code>##  [1] &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;yes&quot;  &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot;
 ## [11] &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot; &quot;nope&quot;</code></pre>
 </div>
@@ -393,12 +411,14 @@ changing string data.</p>
 <p>Fr example, we know that the <code>CityInfo$Year</code> column refers
 to the year each city was founded. Let’s add the string “Founded in”
 before each year name.</p>
+<pre class="r"><code>paste(&quot;Founded in&quot;, CityInfo$Year)</code></pre>
 <pre><code>##  [1] &quot;Founded in 1625&quot; &quot;Founded in 1781&quot; &quot;Founded in 1776&quot; &quot;Founded in 1803&quot;
 ##  [5] &quot;Founded in 1867&quot; &quot;Founded in 1845&quot; &quot;Founded in 1841&quot; &quot;Founded in 1682&quot;
 ##  [9] &quot;Founded in 1630&quot; &quot;Founded in 1701&quot; &quot;Founded in 1858&quot; &quot;Founded in 1851&quot;
 ## [13] &quot;Founded in 1868&quot; &quot;Founded in 1843&quot; &quot;Founded in 1718&quot; &quot;Founded in 1837&quot;
 ## [17] &quot;Founded in 1790&quot; &quot;Founded in 1896&quot; &quot;Founded in 1833&quot;</code></pre>
 <p>Now let’s paste together the city and state names.</p>
+<pre class="r"><code>paste(CityInfo$City,CityInfo$State)</code></pre>
 <pre><code>##  [1] &quot;New York NY&quot;      &quot;Los Angeles CA&quot;   &quot;San Francisco CA&quot; &quot;Chicago IL&quot;      
 ##  [5] &quot;Minneapolis MN&quot;   &quot;Portland OR&quot;      &quot;Dallas TX&quot;        &quot;Philadelphia PA&quot; 
 ##  [9] &quot;Boston MA&quot;        &quot;Detroit MI&quot;       &quot;Denver CO&quot;        &quot;Seattle WA&quot;      
@@ -406,7 +426,9 @@ before each year name.</p>
 ## [17] &quot;Washington DC DC&quot; &quot;Miami FL&quot;         &quot;Milwaukee WI&quot;</code></pre>
 <p>An important feature of the <code>paste()</code> function is that you
 can customize the characters separating each value.</p>
+<pre class="r"><code>paste(&quot;Actor&quot;,&quot;Model&quot;,&quot;Writer&quot;, sep=&quot;-&quot;)</code></pre>
 <pre><code>## [1] &quot;Actor-Model-Writer&quot;</code></pre>
+<pre class="r"><code>paste(CityInfo$City,CityInfo$State, sep=&quot;: &quot;)</code></pre>
 <pre><code>##  [1] &quot;New York: NY&quot;      &quot;Los Angeles: CA&quot;   &quot;San Francisco: CA&quot;
 ##  [4] &quot;Chicago: IL&quot;       &quot;Minneapolis: MN&quot;   &quot;Portland: OR&quot;     
 ##  [7] &quot;Dallas: TX&quot;        &quot;Philadelphia: PA&quot;  &quot;Boston: MA&quot;       
@@ -424,13 +446,18 @@ can customize the characters separating each value.</p>
 graphics package.</p>
 <p>For example,scatter plots can be made using the <code>plot()</code>
 function.</p>
+<pre class="r"><code>plot(CityInfo$Populationmetro_2016,CityInfo$Sportsteam_num)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-14-1.png" width="624" /></p>
 <p>Line plots are made with the <code>plot()</code> function, while
 setting the type to line.</p>
+<pre class="r"><code>plot(CityInfo$Populationmetro_2016,CityInfo$Sportsteam_num,type=&quot;l&quot;)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-15-1.png" width="624" /></p>
+<pre class="r"><code>#This plot also conveys how R will sometimes give you an answer, even when the output is meaningless. It&#39;s up to you to distinguish meaningful results from nonsense.</code></pre>
 <p>Histograms can be made with the <code>hist()</code> function.</p>
+<pre class="r"><code>hist(CityInfo$Bikecom_per)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-16-1.png" width="624" /></p>
 <p>Boxplots can be made with the <code>boxplot()</code> function.</p>
+<pre class="r"><code>boxplot(Bikecom_per~Region,data=CityInfo)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-17-1.png" width="624" /></p>
 </div>
 </div>
@@ -441,19 +468,26 @@ setting the type to line.</p>
 <p>Adding descriptive labels is an important part of data visualization.
 In base R plotting, labels can be added with the <code>main=</code>,
 <code>xlab=</code> and <code>ylab=</code> arguments.</p>
+<pre class="r"><code>boxplot(Bikecom_per~Region,data=CityInfo, main=&quot;Bike commuters by region&quot;, xlab=&quot;Region&quot;, ylab=&quot;Bike Commuters (%)&quot;)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-18-1.png" width="624" /></p>
 <p>Sometimes we also want to add annotations to plots noting things like
 sample size, key observations of interest, or summary statistics. Text
 can be added to an existing plot with the<code>text()</code> function.
 The position is set with x and y coordinates at the scale of the plot
 and the text can be customized in numerous ways.</p>
+<pre class="r"><code>boxplot(Bikecom_per~Region,data=CityInfo, main=&quot;Bike commuters by region&quot;, xlab=&quot;Region&quot;, ylab=&quot;Bike Commuters (%)&quot;)
+text(1,6,&quot;Added text&quot;, col=&quot;blue&quot;)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-19-1.png" width="624" /></p>
 <p>Text can also be added to plots based on the position of data points
 in the plot. Here, we add text above each regional boxplot.</p>
+<pre class="r"><code>boxplot(Bikecom_per~Region,data=CityInfo, main=&quot;Bike commuters by region&quot;, xlab=&quot;Region&quot;, ylab=&quot;Bike Commuters (%)&quot;)
+text(CityInfo$Region,6,&quot;Added text&quot;)</code></pre>
 <pre><code>## Warning in xy.coords(x, y, recycle = TRUE, setLab = FALSE): NAs introduced by
 ## coercion</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-20-1.png" width="624" /></p>
 <p>Add text over each boxplot at the mean point on each plot.</p>
+<pre class="r"><code>boxplot(Bikecom_per~Region,data=CityInfo, main=&quot;Bike commuters by region&quot;, xlab=&quot;Region&quot;, ylab=&quot;Bike Commuters (%)&quot;)
+text(1:4,aggregate(Bikecom_per ~ Region,FUN=mean, data=CityInfo)$Bikecom_per,&quot;Added text&quot;, cex=0.7,col=&quot;blue&quot;)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-21-1.png" width="624" /></p>
 </div>
 </div>
@@ -487,18 +521,22 @@ size, you can represent multiple relationships in a single figure. In
 the figures below, we can differentiate the cities’ regions using
 different shapes and color.</p>
 <p>Below is a basic plot, with no customized graphical parameters.</p>
+<pre class="r"><code>plot(CityInfo$Sunshine_per,CityInfo$Bikecom_per)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-22-1.png" width="624" /></p>
 <p>The <code>pch=</code> argument sets the shape of the points. In this
 case, we define the point shape based on the region each city point is
-in.
-<img src="ANTH630_EDA_files/figure-html/unnamed-chunk-23-1.png" width="624" /></p>
+in.</p>
+<pre class="r"><code>plot(CityInfo$Sunshine_per,CityInfo$Bikecom_per,pch=c(CityInfo$Region))</code></pre>
+<p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-23-1.png" width="624" /></p>
 <p>The <code>col=</code> argument sets the color of the points. Note
 that the <code>Region</code> variable is a factor with 4 levels which is
 needed to be mentioned in order to group the points by different colors
 for different regions.</p>
+<pre class="r"><code>plot(CityInfo$Sunshine_per,CityInfo$Bikecom_per,col=factor(CityInfo$Region))</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-24-1.png" width="624" /></p>
-<p>The <code>cex=</code> argument sets the size of the points.
-<img src="ANTH630_EDA_files/figure-html/unnamed-chunk-25-1.png" width="624" /></p>
+<p>The <code>cex=</code> argument sets the size of the points.</p>
+<pre class="r"><code>plot(CityInfo$Sunshine_per,CityInfo$Bikecom_per,col=factor(CityInfo$Region),pch=19,cex=1.2)</code></pre>
+<p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-25-1.png" width="624" /></p>
 </div>
 </div>
 <div id="section-practice-exercise-6" class="section level2">
@@ -528,6 +566,8 @@ unique properties we can use to our advantage., such as referring to the
 individual levels. It is also important to note that values are stored
 in the factor according to their level number, so if you want to convert
 the data to other classes, you must first adjust for this.</p>
+<pre class="r"><code>plot(CityInfo$Sunshine_per,CityInfo$Bikecom_per,col=factor(CityInfo$Region),pch=19,cex=1.2)
+legend(80,7, legend=levels(factor(CityInfo$Region)), fill=1:length(levels(factor(CityInfo$Region))), cex=0.7)</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-26-1.png" width="624" /></p>
 </div>
 </div>
@@ -537,6 +577,7 @@ the data to other classes, you must first adjust for this.</p>
 <h3></h3>
 <p>R has 657 built-in colors. You can view them by using the
 <code>colors()</code> function. Try it!</p>
+<pre class="r"><code>colors()</code></pre>
 <pre><code>##   [1] &quot;white&quot;                &quot;aliceblue&quot;            &quot;antiquewhite&quot;        
 ##   [4] &quot;antiquewhite1&quot;        &quot;antiquewhite2&quot;        &quot;antiquewhite3&quot;       
 ##   [7] &quot;antiquewhite4&quot;        &quot;aquamarine&quot;           &quot;aquamarine1&quot;         
@@ -757,10 +798,12 @@ the data to other classes, you must first adjust for this.</p>
 ## [652] &quot;yellow&quot;               &quot;yellow1&quot;              &quot;yellow2&quot;             
 ## [655] &quot;yellow3&quot;              &quot;yellow4&quot;              &quot;yellowgreen&quot;</code></pre>
 <p>How did I know how many named colors there are?</p>
+<pre class="r"><code>length(colors())</code></pre>
 <pre><code>## [1] 657</code></pre>
 <p>At any given time, R will use a specific palette whenever colors are
 required. You can view this with the <code>palette()</code>
 function.</p>
+<pre class="r"><code>palette()</code></pre>
 <pre><code>## [1] &quot;black&quot;   &quot;#DF536B&quot; &quot;#61D04F&quot; &quot;#2297E6&quot; &quot;#28E2E5&quot; &quot;#CD0BBC&quot; &quot;#F5C710&quot;
 ## [8] &quot;gray62&quot;</code></pre>
 <p>This is the default palette. The colors are arranged sequentially,
@@ -770,8 +813,18 @@ referred to with their numerical index.</p>
 <p>The <code>RColorBrewer</code> package makes beautiful palettes for
 data visualization in R. Check out the palettes here: <a
 href="http://colorbrewer2.org/">ColorBrewer2.0</a>.</p>
-<p>We can also explore a few more useful palettes.
-<img src="ANTH630_EDA_files/figure-html/unnamed-chunk-30-1.png" width="384" /></p>
+<p>We can also explore a few more useful palettes.</p>
+<pre class="r"><code>rpal&lt;-rainbow(4)
+hpal&lt;-heat.colors(4)
+tpal&lt;-topo.colors(4)
+
+
+par(mfrow=c(2,2))
+plot(CityInfo$Populationmetro_2016,CityInfo$Bikecom_per,col=factor(CityInfo$Region),pch=19,cex=1.2)
+plot(CityInfo$Populationmetro_2016,CityInfo$Bikecom_per,col=rpal[factor(CityInfo$Region)],pch=19,cex=1.2)
+plot(CityInfo$Populationmetro_2016,CityInfo$Bikecom_per,col=hpal[factor(CityInfo$Region)],pch=19,cex=1.2)
+plot(CityInfo$Populationmetro_2016,CityInfo$Bikecom_per,col=tpal[factor(CityInfo$Region)],pch=19,cex=1.2)</code></pre>
+<p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-30-1.png" width="384" /></p>
 </div>
 </div>
 <div id="section-symbol-shapes" class="section level2">
@@ -791,6 +844,7 @@ href="http://www.statmethods.net/advgraphs/parameters.html">here</a></p>
 <p>The <code>pairs()</code> function quickly shows the correlations
 between all variables in a dataframe. This can reveal potential
 combinations of variables that warrant further investigation.</p>
+<pre class="r"><code>pairs(CityInfo[4:8])</code></pre>
 <p><img src="ANTH630_EDA_files/figure-html/unnamed-chunk-31-1.png" width="624" /></p>
 <p>
 <script type="application/shiny-prerendered" data-context="server-start">
@@ -798,7 +852,7 @@ library(learnr)
 library(gradethis)
 library(psych)
 knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 learnr::tutorial_options(
   exercise.timelimit = 60)
 </script>
@@ -834,7 +888,7 @@ output$`tutorial-exercise-exercise1-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise1", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise1", 
     code = "\n\n", opts = list(label = "\"exercise1\"", exercise = "TRUE"), 
@@ -876,7 +930,7 @@ output$`tutorial-exercise-exercise2-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise2", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise2", 
     code = "\n\n", opts = list(label = "\"exercise2\"", exercise = "TRUE"), 
@@ -918,7 +972,7 @@ output$`tutorial-exercise-exercise3-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise3", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise3", 
     code = "\n\n", opts = list(label = "\"exercise3\"", exercise = "TRUE"), 
@@ -960,7 +1014,7 @@ output$`tutorial-exercise-exercise4-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise4", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise4", 
     code = "\n\n", opts = list(label = "\"exercise4\"", exercise = "TRUE"), 
@@ -1002,7 +1056,7 @@ output$`tutorial-exercise-exercise5-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise5", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise5", 
     code = "\n\n", opts = list(label = "\"exercise5\"", exercise = "TRUE"), 
@@ -1045,7 +1099,7 @@ output$`tutorial-exercise-exercise6-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise6", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise6", 
     code = "\n\n", opts = list(label = "\"exercise6\"", exercise = "TRUE"), 
@@ -1087,7 +1141,7 @@ output$`tutorial-exercise-exercise7-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise7", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise7", 
     code = "\n\n", opts = list(label = "\"exercise7\"", exercise = "TRUE"), 
@@ -1129,7 +1183,7 @@ output$`tutorial-exercise-exercise8-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise8", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise8", 
     code = "\n\n", opts = list(label = "\"exercise8\"", exercise = "TRUE"), 
@@ -1171,7 +1225,7 @@ output$`tutorial-exercise-exercise9-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise9", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise9", 
     code = "\n\n", opts = list(label = "\"exercise9\"", exercise = "TRUE"), 
@@ -1213,7 +1267,7 @@ output$`tutorial-exercise-exercise10-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise10", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise10", 
     code = "\n\n", opts = list(label = "\"exercise10\"", exercise = "TRUE"), 
@@ -1255,7 +1309,7 @@ output$`tutorial-exercise-exercise11-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise11", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise11", 
     code = "\n\n", opts = list(label = "\"exercise11\"", exercise = "TRUE"), 
@@ -1298,7 +1352,7 @@ output$`tutorial-exercise-exercise12-practice-output` <- renderUI({
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache(structure(list(label = "exercise12-practice", global_setup = structure(c("library(learnr)", 
 "library(gradethis)", "library(psych)", "knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)", 
-"knitr::opts_chunk$set(echo = FALSE)", "learnr::tutorial_options(", 
+"knitr::opts_chunk$set(echo = TRUE)", "learnr::tutorial_options(", 
 "  exercise.timelimit = 60)"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "exercise12-practice", 
     code = "\n\n", opts = list(label = "\"exercise12-practice\"", 
