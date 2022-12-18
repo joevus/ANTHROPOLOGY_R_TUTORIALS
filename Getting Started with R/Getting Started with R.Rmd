@@ -1,0 +1,491 @@
+---
+title: "Getting Started with R"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+tutorial:
+  id: "StartR"
+  version: 0.5
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(psych)
+knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
+knitr::opts_chunk$set(echo = TRUE)
+learnr::tutorial_options(
+  exercise.timelimit = 60)
+```
+
+R is an incredibly powerful open-source tool for anthropologists, ecologists, humanities scholars, and others interested in data analysis and visualization. This tutorial will introduce you to the the basic components of coding in R.
+
+## Installing RStudio and R
+
+### 
+
+To install RStudio, click [here](https://www.rstudio.com/products/rstudio/download/) and choose the Open Source License.
+
+To install R, visit [CRAN](https://CRAN.R-project.org/) and choose the current version of R for your operating system.
+
+## Getting Started
+
+When you type a command into R, the output will be printed into the console. R can do basic operations, just like a calculator. 
+
+### Running Code
+
+How do we get R to give us answers to our codes? We need to tell it to "run" our code. We can do this by using the "Run" button. We can also run code by putting our cursor on the line we want to run and pressing "Command(Mac)/Control(PC)" and "Return/Enter".
+
+Try running the following calculation examples
+
+```{r, echo = TRUE}
+# Addition
+5+2
+# Subtraction
+10-4
+# Multiplication
+4*7
+# Division
+105/5
+```
+
+*Note: The `#` symbol is a way of "commenting" your code.It is like putting a little description on what you are doing in those lines. Anything after the `#` symbol in R won't be run and will be ignored. You can use it to describe what is going within the code.*
+
+Try doing some arithmetic on your own in the box below. You can run the code by clicking on the blue "Run Code" button at the top right of the box below.
+
+```{r code_sandbox, exercise = TRUE, exercise.cap = "Arithmetic"}
+```
+
+### Data Types in R
+
+Primary data types in R include: 1. numeric, 2. string or character, 3. logical, and 4. factor. Note that output data types do not always match the input data. String data are entered with `""` or `''` surrounding the characters.
+```{r}
+"cheese"
+'red'
+```
+
+Logical data can be represented by either: `F` or `FALSE`. We'll return to factors later.
+
+## Variables and Functions in R
+
+###
+
+While you can directly enter data each time you want to use it, R's power comes from assigning data to named objects or variables. Objects are assigned using the `<-` symbol, which means "everything on the right is now referred to by the object name on the left".
+
+Let's make an object or variable called `x` with the value `5`.
+```{r}
+x<-5
+x
+```
+
+You can also create variables using `=` but this is generally discouraged as a practice. This is because `=` is too easily confused with `==`, which has a different meanining. A single `=` means that whatever is on the left hand side is now equal to the value on the right. A double equals sign instead asks R to test whether or not the value on the left is or is not equal to the value on the right, an equivalency test. The output is a logical vector.
+
+We will learn more about logical tests in R next week, but for now, let's look at these examples. 
+```{r}
+5==5  #note that a double equals sign checks for equivalency in R
+5==6  #Comments in R are prefaced by a hashtag (#). This tells R not to run this line of code, and that it is for your reference only.
+#5=6  # Why doesn't this last line work?
+```
+
+### Practice Exercises
+
+1. Create an object `x` with value 1.
+2. Run a test to evaluate if x is greater than 2.
+3. Run the following: `x=="x"`. Observe the result.
+4. What is the result of adding 3 to x? 
+5. Reassign x to 4.
+6. What happens if you run `e`?
+
+```{r exercise1_code_sandbox, exercise=TRUE, exercise.cap="Variables"}
+```
+
+<details>
+<summary><span style="color:tomato">**Click for solution**</span></summary>
+```{r}
+x<-1
+x>2
+x=="x"
+x+3
+#"x"+3  # why doesn't this work?
+x<-4
+#e
+```
+</details>
+
+
+### A Simple Function
+
+R works by running functions on different datasets and variables. Functions allow us to calculate statistics; summarize, transform and visualize data; and so much more. Let's start with our first function: `plot()`. 
+
+```{r}
+plot(cars)
+```
+
+`cars` is a dataset built into base R, that here R has automatically decided to pull the speed and distance variables out and create a scatterplot. You don't need to worry about the specifics of how and why this works for now, but pat yourself on the back for running your first R function and making a cool (though mysterious) plot!
+
+## R is case sensitive
+Something very important to keep in mind with R is that it is case sensitive, unlike some other languages. This is very important to know for keeping track of different variables and often a cause of many coding errors. For example, we can create three different objects referring to trees by changing the capialization.
+
+```{r}
+Tree <- "tree"
+TREE <- "tree again"
+
+#tree # why doesn't this work?
+
+tree <- "a third tree"
+
+Tree
+TREE
+tree
+```
+
+## Variable classes
+
+###
+As previously mentioned, there are several different types or classes of data that can be assigned. We'll cover a few basics here. Vectors can have either string, logical, or numeric data; but only one class of element per vector. You can check the class of a vector with the `class()` function. In addition, R has built in checks for different classes, such as `is.numeric()`.  
+
+```{r eval=F}
+x <- seq(1,5)
+is.numeric(x)
+x <- c(1:5)
+x <- c(1,10,"eleven", 27) 
+is.numeric(x)
+x <- c(rep(T, 10), F, F, T)
+x
+```
+
+Note that R will automatically convert the numeric data into string data. This is called "coercion".
+
+### Factors
+
+Factors are useful for categorical data with explicit levels (which may or may not be ordered) such as M/F, Y/N or Income Brackets.
+
+```{r}
+x <- factor(c("M", "F", "M", "M"), levels=c("M", "F"))
+x
+str(x)
+```
+
+### Practice Exercise
+
+First let's make a few different objects and then examine them with `class()`. Try to predict in advance which data class each object will be.
+
+```{r}
+tree <- "a third tree"
+x <- TRUE
+y <- "5"
+z <- 5
+```
+
+Create the objects first in the following code chunk as shown above and then observe their `class`.
+
+```{r exercise2-1_code_sandbox, exercise=TRUE, exercise.cap="object_class"}
+```
+
+## Working with vectors and dataframes
+
+### Creating vectors with `c()`
+
+Vectors are one-dimensional sets of values, which can be created using the `concatenate` function (among others). Functions in R are denoted as `functionname()`, in this case `c()`.
+
+Whenever you encounter a new function or want to look up how to use a function, you can refer to the help file. What does `c()` do?
+
+```{r eval=FALSE}
+?c()
+```
+
+Let's try one of the examples from the help file. `c(1,7:9)`. What is the result?
+```{r}
+c(1,7:9) #what is the `:` operator doing?
+c(1,7:50) 
+```
+
+We can also make vectors using character data. Let's make a vector called `Cities`:
+```{r} 
+Cities <- c("New York", "Los Angeles", "San Francisco", "Chicago","Minneapolis")
+```
+
+Look at our new object:
+```{r}
+Cities
+```
+
+Your can select individual elements from a vector:
+```{r}
+Cities[2]
+Cities[c(2,3)]
+```
+
+Don't forget that R is case sensitive. What happens when you enter `cities`?
+```{r eval=F}
+cities
+```
+
+You can add new values to an existing vector:
+```{r}
+Cities <- c(Cities, "Portland")
+```
+
+Check out your handiwork. Call the `Cities` vector:
+```{r}
+Cities
+```
+
+### Practice Exercise
+
+1. You can also make an entirely new object with the same name. Make a new vector called `Cities` with three new city names. Look at your new `Cities` object. What happened to the old cities? 
+
+```{r exercise2-1-1_code_sandbox, exercise=TRUE, exercise.cap="Vectors1"}
+```
+
+2. Reassign the `Cities` object to the following cities: "New York", "Los Angeles", "San Francisco", "Chicago","Minneapolis","Portland"`.
+
+```{r exercise2-2_code_sandbox, exercise=TRUE, exercise.cap="Vectors2"}
+```
+
+## Creating vectors with `rep()` and `seq()`
+
+There are many ways to create vectors in R. These two commonly used functions can repeat values or return a sequence of values.
+
+```{r}
+rep(6,times=10) #repeating a single number
+rep(c("a","b"),10) #repeating several values
+rep(c("a","b"),c(5,5)) # repeating each value in a sequence multiple times
+```
+
+### Practice Exercise
+
+Using 3 different methods, create a variable that is a sequence of the numbers 1-3, repeated in order 4 times. Hint: read the `seq()` help file. 
+
+```{r exercise2-3_code_sandbox, exercise=TRUE, exercise.cap="Vectors3"}
+```
+
+<details>
+<summary><span style="color:tomato">**Click for solution**</span></summary>
+```{r}
+test <- rep(seq(1,3),4)
+test
+test <- rep(seq(1:3),4)
+test
+test <- rep(c(1:3),4)
+test
+rep(seq(from=1,to=3),4)
+
+```
+</details>
+
+## Dataframes
+
+While data can be stored in lists and matrices, the most common and flexible data format you will use in R is a dataframe. Dataframes can contain multiple classes of data, but only one class per vector. Data frames are usually organized with each row representing a single case. Columns denote variables which apply across cases.
+
+Let's make a `CityInfo` dataframe.
+
+Make two vectors:
+
+1. `State` with the values: NY, CA, CA, IL, MN, OR. Hint: Use the `c()` function.
+
+2. `Sunshine_per` with the values:  58, 73, 66, 54, 58, 48. These values denote the average percent of total possible annual sunshine experienced in each city. 
+
+```{r exercise3-1, exercise = TRUE}
+```
+
+```{r exercise3-1-solution}
+State <- c("NY","CA","CA","IL","MN","OR")
+Sunshine_per <- c(58, 73, 66, 54, 58, 48)
+```
+
+```{r exercise3-1-check}
+grade_code("Excellent!")
+```
+
+We can combine these vectors together using `cbind()` which binds the columns together. 
+
+```{r}
+State <- c("NY","CA","CA","IL","MN","OR")
+Sunshine_per <- c(58, 73, 66, 54, 58, 48)
+cbind(Cities, State, Sunshine_per) # combining the vectors
+```
+
+You'll notice that `cbind()` coerces the data into characters. R has multiple ways to combine vectors into dataframes. Here we use the `data.frame()` function. 
+
+```{r}
+CityInfo<-data.frame(Cities,State,Sunshine_per)
+CityInfo
+```
+
+Now we have created a CityInfo object that is equivalent to a dataframe of the three vectors about cities we created earlier. R can give us summary and structural information about our new dataframe:
+```{r}
+names(CityInfo)
+str(CityInfo)
+summary(CityInfo)
+nrow(CityInfo)
+ncol(CityInfo)
+```
+
+## Selecting and subsetting variables
+
+### Subsetting with `$`
+
+In wide format, each row in a dataframe is a case, while the columns are variables that are measures for each case. To select a variable in a dataframe, you use the `$` operator.
+
+Call the `Sunshine_per` column using the `$` operator. What data class is it?
+
+```{r results="hide"}
+CityInfo$Sunshine_per
+class(CityInfo$Sunshine_per)
+```
+
+### Subsetting with `[,]`
+
+Dataframes can be subset using the format `dfname[row#,col#]`, or by calling columns by name.
+
+```{r}
+CityInfo[1,1]
+CityInfo[,3]
+CityInfo[2,]
+CityInfo[,"State"]
+```
+
+You can also subset dataframes based on logical tests. Let's look at all the cities and states for which enjoy over 55% sunshine. Then let's examine all the columns for any rows where the state is equal to California. 
+
+```{r eval=F}
+CityInfo[CityInfo$Sunshine_per>55,c("Cities","State")]
+CityInfo[CityInfo$Sunshine_per>55,1:2]
+
+#cityInfo[CityInfo$State==CA,]
+```
+What's wrong with this last line of code? Try to think about it! (Hint: 2 things)
+
+### Using `subset()`
+
+We can also subset dataframes with a specific function: `subset()`. Let's examine the help file to see what this function does.
+
+```{r eval=FALSE}
+?subset()
+```
+
+Let's subset all the data for cities with sunshine percentages greater than 55
+```{r}
+subset(CityInfo, Sunshine_per>55)
+```
+
+You can subset based on multiple conditions.
+```{r}
+subset(CityInfo, State=="CA" & Sunshine_per > 55)
+```
+
+You can also use the `|` operator to select cases which have one or the other condition. 
+```{r}
+subset(CityInfo, State=="CA" | Sunshine_per >55)
+```
+
+### Practice Exercise
+
+**Exercise 4.1**
+
+Add the code to display all columns for all the rows in which the state is California.
+
+```{r exercise4-1, exercise = TRUE}
+```
+
+```{r exercise4-1-solution}
+CityInfo[CityInfo$State=="CA",] 
+```
+
+```{r exercise4-1-check}
+grade_code("Great work!")
+```
+
+**Exercise 4.2**
+
+Using the `!` operator, we can also select all rows which are 'not equal' to a given value. Select all the rows for cities outside of California.
+
+
+```{r exercise4-2, exercise = TRUE}
+```
+
+```{r exercise4-2-solution}
+CityInfo[CityInfo$State!="CA",] 
+```
+
+```{r exercise4-2-check}
+grade_code("Good job!")
+```
+
+## Descriptive statistics
+
+### Averages and vector characteristics
+
+Often when exploring data we are interested in some basic descriptive statistics such as the mean, median and mode. R has functions built in for this. 
+
+```{r}
+mean(CityInfo$Sunshine_per)
+median(CityInfo$Sunshine_per)
+mode(CityInfo$Sunshine_per)
+length(CityInfo$Sunshine_per)
+max(CityInfo$Sunshine_per)
+sum(CityInfo$Sunshine_per)
+```
+
+
+We can also examine the spread of the data by making a histogram.
+```{r}
+hist(CityInfo$Sunshine_per)
+```
+
+This doesn't look the best, so we might want to update the bin size and add a title. We don't have many observations here, but you can see how in principle, adjusting the bin size can change your interpretation of the data distribution.
+```{r}
+hist(CityInfo$Sunshine_per, breaks=3,main="Histogram of City Sunshine", xlab="Sunshine percent", ylab="Frequency")
+```
+
+## Vector arithmetic
+
+We can also run calculations on vectors as a whole. Something to keep note of is that R will *recycle* through each vector during vector arithmetic. R doesn't always return a warning when this is occuring, so be sure to keep this in mind. 
+
+```{r}
+CityInfo$Sunshine_per
+CityInfo$Sunshine_per / 2
+
+CityInfo$Sunshine_per / c(10,1) # how does R treat the two vectors during this operation?
+CityInfo$Sunshine_per / c(10,1, 2)
+
+CityInfo$Sunshine_per + 2
+```
+
+## Summarizing character vectors
+
+Sometimes you might encounter a long list of values that you would like to summarize. There are several ways of quickly assessing the basic attributes of a vector.
+
+```{r}
+# First we make a fruits vector
+fruits <- rep(c("apple", "orange","banana","pear", "pineapple"), c(10))
+fruits <- c(fruits, rep(c("mango", "blueberry"), 2))
+
+unique(fruits) # returns the name of each unique named fruit
+length(unique(fruits)) # how many unique fruits are there?
+
+table(fruits) # returns a table of the number of times each fruit appears in the vector
+```
+
+## Missing values
+
+In an ideal world, every data cell would be filled in every data table...but this is rarely the case. Sometimes (ok, frequently) we encounter missing values. But what is a missing value and how does R deal with them? How do you know a missing value when you see it?
+
+R codes missing values as `NA` (not "NA" which is a character/string element). Having missing values in a dataframe can cause some functions to fail. Check out the following example.
+
+```{r}
+missingparts <- c(1, 2, 3,  NA)
+mean(missingparts) # what is the result?
+mean(missingparts, na.rm=T) # we can tell the function to ignore any NA values in the data
+missingparts[is.na(missingparts)] #you can also subset out only the values that are equal to NA. This is not so useful here, but can be useful when you want to isolate rows in a dataframe that have missing values in particular columns.
+```
+
+### Practice Exercise
+
+How do you know you have missing values rather than another issue in your code? There are a few functions that allow us to pick out the NAs. Try examining the `missingparts` vector with `str()`, `summary()`, and `is.na()`. What is the result of each of these functions and how might this output be useful?
+
+```{r exercise7-1_code_sandbox, exercise=TRUE, exercise.cap="missing_value"}
+missingparts <- c(1, 2, 3,  NA)
+```
