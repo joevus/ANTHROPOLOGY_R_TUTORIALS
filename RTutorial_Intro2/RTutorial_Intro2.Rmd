@@ -145,4 +145,127 @@ CityInfo[c(5,6),]
 grade_code("Excellent!")
 ```
 
+## Logical tests and dataframe subsetting
+You can subset dataframes in numerous ways. Last week we discussed the `subset()`, `$`, and `[,]` functions. We can also use logical tests and specific functions to subset dataframes based on conditionals. 
+```{r}
+CityInfo[CityInfo$Region == "W" & CityInfo$State == "CA", ]
+CityInfo[CityInfo$Region == "W" | CityInfo$State == "CA", ]
+CityInfo[CityInfo$Region == "W" & CityInfo$State != "CA", ]
+```
 
+Suppose we want to subset the city names based on whether they are in the NE and W regions. We can use `%in%`.
+```{r}
+CityInfo$Region  %in% c("NE", "W") # what does this return?
+CityInfo[CityInfo$Region %in% c("NE", "W"),"City"] # what does this return?
+```
+
+There are also additional functions that allow you to match subsets of dataframes based on particular values. 
+```{r}
+CityInfo
+
+which(CityInfo$Populationmetro_2016 > 3475000) # this returns the index of the value from the vector
+
+CityInfo[which(CityInfo$Populationmetro_2016 > 3475000),] # this subsets the whole dataframe for only the cities with populations over 3475000.
+
+```
+
+## Regular Expressions
+
+Text can be searched using a standardized lexicon called *regular expressions*. [Read more](https://en.wikipedia.org/wiki/Regular_expression) on regular expressions and how to [se them]](https://r4ds.had.co.nz/strings.html#matching-patterns-with-regular-expressions) for data science. Regular expressions are also helpful when pasting labels or programming figure titles/captions in a standardized way (for example, adding new lines). Here let's use `str_detect()` to pull out some strings with regular expressions.
+
+```{r}
+library(tidyverse)
+
+#any cities ending in "s"
+CityInfo$City[str_detect(CityInfo$City,"s$")]
+
+# which rows have a city ending in "s"
+str_detect(CityInfo$City,"s$")
+
+#any cities with a space in the name
+CityInfo$City[str_detect(CityInfo$City, ". .")]
+
+
+
+```
+
+Some basics with regular expressions:
+
+- `$` means the end of a string (line, e.g. whole string, not within string)
+- `^` means the start of a string
+- `[]` means to search for any of the included characters within that bracket at that position. Simply listing characters will lead to direct matches, while you can also create ranges and exclusions.
+- `.` can stand in for any character except a return (new line)
+- `\n` means a new line
+- `|` means "or", just as in base R
+- Because certain characters have a meaning in regular expressions (e.g. `.` and `\`), you need to *escape* the character first in order to directly match it. See [here](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html) for details. 
+- You can look for patterns that repeat or restrict a search to only digits or letters. This can be helpful for data validation or searching for standardized strings such as zip codes, phone numbers, or names.
+
+### Try-it
+
+1. Select all city names starting with "s".
+
+```{r exercise2-1, exercise = TRUE}
+
+```
+
+```{r exercise2-1-solution}
+CityInfo$City[str_detect(CityInfo$City,"^s")]
+#why doesn't this work? R is case sensitive
+CityInfo$City[str_detect(CityInfo$City,"^S")]
+```
+
+```{r exercise2-1-check}
+grade_result(
+  pass_if(~ identical(.result, CityInfo$City[str_detect(CityInfo$City,"^s")]), "Good Job!"),
+  fail_if(~ TRUE)
+)
+```
+
+
+2. Print all city names for cities founded in the 1600s or 1700s
+
+```{r exercise2-2, exercise = TRUE}
+
+```
+
+```{r exercise2-2-solution}
+CityInfo$City[str_detect(CityInfo$Year,"1[6-7].")]
+```
+
+```{r exercise2-2-check}
+grade_result(
+  pass_if(~ identical(.result, CityInfo$City[str_detect(CityInfo$Year,"1[6-7].")]), "Excellent!"),
+  fail_if(~ TRUE)
+)
+```
+
+3. Print the name and year of founding for all cities with either "as" or "il" in the name.
+
+```{r exercise2-3, exercise = TRUE}
+
+```
+
+```{r exercise2-3-solution}
+CityInfo[str_detect(CityInfo$City,"as|il"), c("City", "Year")]
+```
+
+```{r exercise2-3-check}
+grade_result(
+  pass_if(~ identical(.result, CityInfo[str_detect(CityInfo$City,"as|il"), c("City", "Year")]), "Great!"),
+  fail_if(~ TRUE)
+)
+```
+
+### Data were obtained from several sources: 
+
+[Sports teams in the Big 4 (NFL, MLB, NMA, NHL) and metro population estimates](https://en.wikipedia.org/wiki/List_of_American_and_Canadian_cities_by_number_of_major_professional_sports_franchises)
+
+[Bike commuters 1](http://bikeleague.org/sites/default/files/Where_We_Ride_2014_data_web.pdf#12)
+
+[Bike commuters 2](https://en.wikipedia.org/wiki/List_of_U.S._cities_with_most_bicycle_commuters)
+
+[Year of Foundation](https://en.wikipedia.org/wiki/List_of_cities_in_the_Americas_by_year_of_foundation)
+
+[Sunniest cities in US](https://www.nerdwallet.com/blog/sunniest-cities/) (Using National oceanic atmmospheric administation data. Average percent of possible sunshine)
+
+[Regions census divisions](https://en.wikipedia.org/wiki/List_of_regions_of_the_United_States)
