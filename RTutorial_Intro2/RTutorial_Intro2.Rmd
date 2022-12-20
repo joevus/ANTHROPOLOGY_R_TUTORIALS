@@ -1,0 +1,148 @@
+---
+title: "Packages and data wrangling with base R"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+tutorial:
+  id: "PackagesAndDataWranglingWithBaseR"
+  version: 0.5
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
+knitr::opts_chunk$set(echo = TRUE)
+learnr::tutorial_options(
+  exercise.timelimit = 60)
+```
+Tutorial written by Madeline Brown and modified for learnr
+
+<a class="btn btn-primary btn-sm" href="https://maddiebrown.github.io/ANTH630/ANTH630syllabus.html" role="button">ANTH630 Home</a>
+
+## Loading packages and data
+
+### Installing  and loading packages 
+R comes with basic functions, but you need to install packages in order to really maximize R's functionality. You can install a package as follows:
+```{r eval=F}
+install.packages("psych")
+```
+Packages can also be installed by by using the "Tools" or "Install Packages" menu in RStudio. 
+
+Packages only need to be installed once, but must be loaded with each new session of R. Let's load the `psych` package. We will use this later to produce summary statistics. Use the `library()` function to load a package. 
+```{r}
+library(psych)
+```
+
+### Setting the working directory
+The working directory is where R will automatically look to find files to load into R and where any files you create will be exported to. You can save a lot of time by setting and using a working directory. 
+ 
+```{r eval=F}
+getwd() #shows you the working directory
+setwd("path") 
+#windows: "C:\Users\username\Desktop\filename.csv"
+#mac: ""/Users/username/Desktop/filename.csv""
+```
+
+### Reading and writing data
+To read in a data file, we can use the `read.csv( )` function. If the data file is within your working directory, you can simply refer to the file name. On a mac you can also right click on the file and hold down the option key to copy the file pathname. 
+```{r}
+#CityInfo <- read.csv("pathname/CityInfo.csv")
+#CityInfo<-read.csv("CityInfo.csv")
+```
+
+```{r}
+CityInfo  <- read.csv("https://maddiebrown.github.io/ANTH630/data/Cityinfo.csv")
+```
+
+```{r}
+#write.csv(CityInfo, "CityInfo2.csv")
+```
+
+## Exploratory data analysis
+Check out this new `CityInfo` dataframe.
+```{r}
+CityInfo
+```
+Before we do anything else, let's make a quick boxplot of the sunshine across regions in our dataframe.
+```{r}
+boxplot(Sunshine_per~Region,data=CityInfo, xlab="Region",ylab="Sunshine %", main="Sunshine by US region",col="goldenrod")
+```
+
+Now let's examine our dataframe. Look at the first six rows
+```{r}
+head(CityInfo)
+```
+Examine the dataframe structure
+```{r}
+str(CityInfo)
+```
+And look at summary statistics for the dataframe
+```{r}
+summary(CityInfo)
+psych::describe(CityInfo)
+```
+
+### Try it
+Recalling what we learned about subsetting dataframes, try to complete the following tasks:
+
+1. Select the `Year` column.
+
+```{r exercise1-1, exercise = TRUE}
+
+```
+
+```{r exercise1-1-solution}
+CityInfo$Year
+# Or
+CityInfo[,7]
+```
+
+```{r exercise1-1-check}
+grade_result(
+  pass_if(~ identical(.result, CityInfo$Year), "Good Job!"),
+  fail_if(~ TRUE)
+)
+```
+
+2. Select the 5th element of the `Year` column.
+
+```{r exercise1-2, exercise = TRUE}
+```
+
+```{r exercise1-2-solution}
+CityInfo$Year[5]
+```
+
+```{r exercise1-2-check}
+grade_code("Excellent!")
+```
+
+3. Select the 5th row of the `CityInfo` dataframe.
+
+```{r exercise1-3, exercise = TRUE}
+```
+
+```{r exercise1-3-solution}
+CityInfo[5,]
+```
+
+```{r exercise1-3-check}
+grade_code("Excellent!")
+```
+
+4. Select the 5th and 6th rows.
+
+```{r exercise1-4, exercise = TRUE}
+```
+
+```{r exercise1-4-solution}
+CityInfo[c(5,6),]
+```
+
+```{r exercise1-4-check}
+grade_code("Excellent!")
+```
+
+
